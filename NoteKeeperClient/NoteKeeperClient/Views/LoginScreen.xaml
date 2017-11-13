@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:attached="clr-namespace:NoteKeeperClient.AttachedProperties"
+            xmlns:converters="clr-namespace:NoteKeeperClient.Converters"
+             x:Class="NoteKeeperClient.Views.LoginScreen">
+  <TabbedPage.Resources>
+    <ResourceDictionary>
+      <converters:InverseBoolConverter x:Key="InverseBool"/>
+    </ResourceDictionary>
+  </TabbedPage.Resources>
+  <NavigationPage  Title="Войти">
+    <x:Arguments>
+      <ContentPage Title="NoteKeeper"
+                   attached:AttachedProperties.Error="{Binding Error, Mode = TwoWay}">
+        <StackLayout>
+          <Entry Placeholder="Email" Text="{Binding LogInEmail}" IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
+          <Button Text="Войти" Command="{Binding LogInCommand}" IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
+          <ProgressBar attached:AttachedProperties.IsBusy ="{Binding IsBusy}" IsVisible="False"/>
+        </StackLayout>
+      </ContentPage>
+    </x:Arguments>
+  </NavigationPage>
+  <NavigationPage  Title="Создать аккаунт">
+    <x:Arguments>
+      <ContentPage Title="NoteKeeper">
+        <StackLayout>
+          <Entry Placeholder="Email" Text="{Binding CreateEmail}" IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
+          <Entry Placeholder="Имя" Text="{Binding CreateName}" IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
+          <Button Text="Создать пользователя" Command="{Binding CreateUserCommand}" IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
+          <ProgressBar attached:AttachedProperties.IsBusy ="{Binding IsBusy}" IsVisible="False"/>
+        </StackLayout>
+      </ContentPage>
+    </x:Arguments>
+  </NavigationPage>
+</TabbedPage>

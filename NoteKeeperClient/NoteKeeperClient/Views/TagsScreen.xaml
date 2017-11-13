@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:attached="clr-namespace:NoteKeeperClient.AttachedProperties"
+             x:Class="NoteKeeperClient.Views.TagsScreen"
+             x:Name="TagsScreen"
+             Title="Теги"
+             attached:AttachedProperties.Error="{Binding Error, Mode = TwoWay}">
+  <ContentPage.Content>
+    <StackLayout>
+      <ListView x:Name="Tags"
+                ItemsSource="{Binding Path=Tags}">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell>
+              <ViewCell.ContextActions>
+                <MenuItem Text="Изменить"
+                          Command="{Binding Path=BindingContext.EditTagCommand, Source={x:Reference TagsScreen}}"
+                          CommandParameter="{Binding .}"/>
+                <MenuItem Text="Удалить"
+                          Command="{Binding Path=BindingContext.DeleteTagCommand, Source={x:Reference TagsScreen}}"
+                          CommandParameter="{Binding .}"/>
+              </ViewCell.ContextActions>
+              <Label Text="{Binding Path=Name}"/>
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+      <Button Text="Создать" Command="{Binding Path=CreateTagCommand}"/> 
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

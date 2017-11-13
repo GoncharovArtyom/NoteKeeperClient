@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:attached="clr-namespace:NoteKeeperClient.AttachedProperties"
+             x:Class="NoteKeeperClient.Views.CreateNoteScreen"
+             attached:AttachedProperties.Error="{Binding Error, Mode = TwoWay}">
+  <ContentPage.Content>
+    <StackLayout>
+      <Label Text="Заголовок"
+                HorizontalOptions="CenterAndExpand"/>
+      <Editor Text="{Binding Path=Heading}"/>
+      <Label Text="Текст"
+                HorizontalOptions="CenterAndExpand"/>
+      <Editor Text="{Binding Path=Text}"/>
+      <Grid IsVisible="{Binding Path=HasTag}">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Text="К заметке добавится тег:" Grid.Column="0" Grid.Row="0"/>
+        <Label Text="{Binding Path=SelectedTag.Name}" Grid.Column="1" Grid.Row="0"/>
+      </Grid>
+      <Button Text="Создать" Command="{Binding Path=CreateNoteCommand}"/>
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

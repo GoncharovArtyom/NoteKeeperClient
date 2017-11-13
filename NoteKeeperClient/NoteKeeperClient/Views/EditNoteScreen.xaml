@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:attached="clr-namespace:NoteKeeperClient.AttachedProperties"
+            xmlns:converters="clr-namespace:NoteKeeperClient.Converters"
+             x:Class="NoteKeeperClient.Views.EditNoteScreen"
+            x:Name="TabbedPage">
+
+  <ContentPage Title="Информация"
+               attached:AttachedProperties.Error="{Binding Error, Mode = TwoWay}">
+    <ContentPage.Content>
+      <StackLayout>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Label Grid.Column="0" Grid.Row="0" Text="Владелец"/>
+          <Label Grid.Column="1" Grid.Row="0" Text="{Binding Path=Owner.Name}"/>
+          <Label Grid.Column="1" Grid.Row="1" Text="{Binding Path=Owner.Email}"/>
+          <Label Grid.Column="0" Grid.Row="2" Text="Дата создания"/>
+          <Label Grid.Column="1" Grid.Row="2" Text="{Binding Path=SelectedNote.CreationDate, StringFormat='{0:yyyy:MM:dd}'}"/>
+          <Label Grid.Column="0" Grid.Row="3" Text="Дата последнего изменения"/>
+          <Label Grid.Column="1" Grid.Row="3" Text="{Binding Path=SelectedNote.LastUpdateDate, StringFormat='{0:yyyy:MM:dd}'}"/>
+        </Grid>
+        <Label Text="Заголовок"/>
+        <Label Text="{Binding Path=SelectedNote.Heading, Mode=TwoWay}"/>
+        <Label Text="Текст"/>
+        <Label Text="{Binding Path=SelectedNote.Text, Mode=TwoWay}"/>
+      </StackLayout>
+    </ContentPage.Content>
+  </ContentPage>
+  <ContentPage Title="Редактировать">
+    <ContentPage.Content>
+      <StackLayout>
+        <Label Text="Заголовок"
+                HorizontalOptions="CenterAndExpand"/>
+        <Editor Text="{Binding Path=NewHeading}"/>
+        <Label Text="Текст"
+                HorizontalOptions="CenterAndExpand"/>
+        <Editor Text="{Binding Path=NewText}"/>
+        <Button Text="Сохранить" Command="{Binding Path=SaveNoteCommand}"/>
+      </StackLayout>
+    </ContentPage.Content>
+  </ContentPage>
+  <ContentPage Title="Теги"
+               x:Name="TagsPage">
+    <ContentPage.Resources>
+      <ResourceDictionary>
+        <converters:BoolToOrangeColorConverter x:Key="BoolToColor"/>
+      </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+      <ListView ItemsSource="{Binding Path=Tags}"
+                HasUnevenRows="True"
+                x:Name="Tags">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell>
+              <ViewCell.ContextActions>
+                <MenuItem Text="Добавить" 
+                          Command="{Binding Path=BindingContext.AddTagCommand, Source={x:Reference TabbedPage}}" 
+                          CommandParameter="{Binding .}"/>
+                <MenuItem Text="Удалить"
+                          Command="{Binding Path=BindingContext.RemoveTagCommand, Source={x:Reference TabbedPage}}" 
+                          CommandParameter="{Binding .}"/>
+              </ViewCell.ContextActions>
+              <StackLayout Padding="5"
+                           BackgroundColor="{Binding Path=IsSelected, Converter={StaticResource Key=BoolToColor}}">
+              <Label Text="{Binding Path=Tag.Name}" 
+                     FontSize="Large"/>
+              </StackLayout>
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>   
+      </ListView>
+    </ContentPage.Content>
+  </ContentPage>
+  <ContentPage Title="Пользователи">
+    <ContentPage.Content>
+      <StackLayout>
+        <Label Text="Поделиться"/>
+        <Entry Text="{Binding Path=NewPartnerName}" Placeholder="Email"/>
+        <Button Text="Добавить" Command="{Binding Path=AddPartnerCommand}"/>
+        <Label Text="Имеют доступ"/>
+        <ListView ItemsSource="{Binding Path=SelectedNote.Partners}"
+                  HasUnevenRows="True">
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <ViewCell>
+                <ViewCell.ContextActions>
+                  <MenuItem Text="Удалить"
+                            Command="{Binding Path=BindingContext.RemovePartnerCommand, Source={x:Reference TabbedPage}}" 
+                          CommandParameter="{Binding .}"/>
+                </ViewCell.ContextActions>
+                <Label Text="{Binding Path=Name}"/>
+                <Label Text="{Binding Path=Email}"/>
+              </ViewCell>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+      </StackLayout>
+    </ContentPage.Content>
+  </ContentPage>
+</TabbedPage>

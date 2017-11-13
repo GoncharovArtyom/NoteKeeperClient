@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NoteKeeperClient.Views.SharedNoteScreen">
+  <ContentPage.Content>
+    <StackLayout>
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0" Grid.Row="0" Text="Владелец"/>
+        <Label Grid.Column="1" Grid.Row="0" Text="{Binding Path=OwnerName}"/>
+        <Label Grid.Column="1" Grid.Row="1" Text="{Binding Path=OwnerEmail}"/>
+        <Label Grid.Column="0" Grid.Row="2" Text="Дата создания"/>
+        <Label Grid.Column="1" Grid.Row="2" Text="{Binding Path=CreationDate, StringFormat='{0:yyyy:MM:dd}'}"/>
+        <Label Grid.Column="0" Grid.Row="3" Text="Дата последнего изменения"/>
+        <Label Grid.Column="1" Grid.Row="3" Text="{Binding Path=LastUpdateDate, StringFormat='{0:yyyy:MM:dd}'}"/>
+      </Grid>
+      <Label Text="Заголовок"/>
+      <Label Text="{Binding Path=Heading}"/>
+      <Label Text="Текст"/>
+      <Label Text="{Binding Path=Text}"/>
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

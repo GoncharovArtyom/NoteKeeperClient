@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:attached="clr-namespace:NoteKeeperClient.AttachedProperties"
+             xmlns:converters="clr-namespace:NoteKeeperClient.Converters"
+             x:Class="NoteKeeperClient.Views.MainScreenDetail"
+             x:Name="DetailPage"
+             Title="Заметки"
+             attached:AttachedProperties.Error="{Binding Error, Mode = TwoWay}">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:InverseBoolConverter x:Key="InverseBool"/>
+      <converters:StringCollectionToString x:Key="StringCollectionToString"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Order="Primary"  Text="Создать" Command="{Binding Path=CreateNoteCommand}"/>
+    <ToolbarItem Order="Secondary"  Text="Упорядочить:" Priority="0"/>
+    <ToolbarItem Order="Secondary" Text="По дате" Command="{Binding Path=SortByDateCommand}"/>
+    <ToolbarItem Order="Secondary" Text="По заголовку" Command="{Binding Path=SortByHeadingCommand}"/>
+  </ContentPage.ToolbarItems>
+  <StackLayout Padding="10">
+    <ListView x:Name="Notes" 
+              ItemsSource="{Binding Path=NotesToShow}" 
+              HasUnevenRows="True"  
+              SelectedItem="{Binding Path=SelectedNote, Mode=TwoWay}"
+              IsVisible="{Binding Path=AreSharedNotesShown, Converter={StaticResource Key=InverseBool}}"
+              IsPullToRefreshEnabled="True"
+              RefreshCommand="{Binding Path=RefreshCommand}"
+              IsRefreshing="{Binding Path=IsRefreshing}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <ViewCell.ContextActions>
+              <MenuItem Text="Подробнее" Command="{Binding Path=BindingContext.EditNoteCommand, Source={x:Reference DetailPage}}" CommandParameter="{Binding .}"/>
+              <MenuItem Text="Удалить" Command="{Binding Path=BindingContext.DeleteNoteCommand, Source={x:Reference DetailPage}}" CommandParameter="{Binding .}"/>
+            </ViewCell.ContextActions>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+              </Grid.RowDefinitions>
+              <Label Grid.Column="1" Grid.Row="1" Text="{Binding Path=Heading}" FontAttributes="Bold"/>
+              <Label Grid.Column="1" Grid.Row="2" Text="{Binding Path=Text}"/>
+              <Label Grid.Column="1" Grid.Row="3" Text="{Binding Path=CreationDate, StringFormat='{0:yyyy:MM:dd}'}"/>
+              <Label Grid.Column="1" Grid.Row="4" Text="{Binding Path=TagNames, Converter={StaticResource Key=StringCollectionToString}, ConverterParameter='50'}"/>
+            </Grid>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+    <ListView x:Name="SharedNotes" 
+              ItemsSource="{Binding Path=SharedNotes}" 
+              HasUnevenRows="True"  
+              SelectedItem="{Binding Path=SelectedSharedNote, Mode=TwoWay}"
+              IsVisible="{Binding Path=AreSharedNotesShown}"
+              IsPullToRefreshEnabled="True"
+              RefreshCommand="{Binding Path=RefreshCommand}"
+              IsRefreshing="{Binding Path=IsRefreshing}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <ViewCell.ContextActions>
+              <MenuItem Text="Подробнее" 
+                        Command="{Binding Path=BindingContext.ExploreSharedNoteCommand, Source={x:Reference DetailPage}}"
+                        CommandParameter="{Binding .}"/>
+              <MenuItem Text="Удалить" 
+                        Command="{Binding Path=BindingContext.DeleteSharedNoteCommand, Source={x:Reference DetailPage}}" 
+                        CommandParameter="{Binding .}"/>
+            </ViewCell.ContextActions>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+              </Grid.RowDefinitions>
+              <Label Grid.Column="1" Grid.Row="1" Text="{Binding Path=Heading}" FontAttributes="Bold"/>
+              <Label Grid.Column="1" Grid.Row="2" Text="{Binding Path=Text}"/>
+              <Label Grid.Column="1" Grid.Row="3" Text="{Binding Path=CreationDate, StringFormat='{0:yyyy:MM:dd}'}"/>
+            </Grid>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+  </StackLayout>
+</ContentPage>

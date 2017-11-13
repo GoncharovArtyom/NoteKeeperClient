@@ -1,0 +1,9 @@
+*.sln
+*packages/
+*/*/packages/
+*.vs
+*/*/bin/
+*/*/obj/
+NoteKeeper.Model.dll
+NoteKeeperClient/NoteKeeperClient.IOS
+NoteKeeperClient/NoteKeeperClient.UWP
