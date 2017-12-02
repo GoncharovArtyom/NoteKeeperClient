@@ -2,17 +2,36 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:attached="clr-namespace:NoteKeeperClient.AttachedProperties"
+             xmlns:converters="clr-namespace:NoteKeeperClient.Converters"
              x:Class="NoteKeeperClient.Views.CreateNoteScreen"
              attached:AttachedProperties.Error="{Binding Error, Mode = TwoWay}">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:InverseBoolConverter x:Key="InverseBool"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
   <ContentPage.Content>
-    <StackLayout>
+    <StackLayout VerticalOptions="FillAndExpand" 
+                 HorizontalOptions="FillAndExpand"
+                 Padding="5">
       <Label Text="Заголовок"
-                HorizontalOptions="CenterAndExpand"/>
-      <Editor Text="{Binding Path=Heading}"/>
+             FontSize="Medium"
+              FontAttributes="Bold"
+              HorizontalTextAlignment="Center"
+              Margin="5"/>
+      <Editor Text="{Binding Path=Heading}"
+              Margin="5"/>
       <Label Text="Текст"
-                HorizontalOptions="CenterAndExpand"/>
-      <Editor Text="{Binding Path=Text}"/>
-      <Grid IsVisible="{Binding Path=HasTag}">
+             FontSize="Medium"
+              FontAttributes="Bold"
+              HorizontalTextAlignment="Center"
+              Margin="5"/>
+      <ScrollView Margin="5" VerticalOptions="FillAndExpand">
+      <Editor Text="{Binding Path=Text}"
+              VerticalOptions="FillAndExpand"/>
+      </ScrollView>
+      <Grid IsVisible="{Binding Path=HasTag}"
+            Margin="5">
         <Grid.ColumnDefinitions>
           <ColumnDefinition/>
           <ColumnDefinition/>
@@ -20,10 +39,29 @@
         <Grid.RowDefinitions>
           <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Text="К заметке добавится тег:" Grid.Column="0" Grid.Row="0"/>
+        <Label Text="К заметке добавится тег:"
+               Grid.Column="0" Grid.Row="0"
+               TextColor="#6C8CD5"/>
         <Label Text="{Binding Path=SelectedTag.Name}" Grid.Column="1" Grid.Row="0"/>
       </Grid>
-      <Button Text="Создать" Command="{Binding Path=CreateNoteCommand}"/>
-    </StackLayout>
+      <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="20*"/>
+          <ColumnDefinition Width="60*"/>
+          <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+      <Button Text="Создать" 
+              Command="{Binding Path=CreateNoteCommand}"
+              Margin="5"
+              IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"
+              Grid.Column="1"/>
+        </Grid>
+        <ProgressBar attached:AttachedProperties.IsBusy ="{Binding IsBusy}" 
+                       IsVisible="False"
+                       VerticalOptions="End"/>
+      </StackLayout>
   </ContentPage.Content>
 </ContentPage>

@@ -15,7 +15,7 @@ namespace NoteKeeperClient
         {
             InitializeComponent();
 
-            var connectionString = "http://192.168.0.102:3000/api/";
+            var connectionString = "http://notekeeper.azurewebsites.net/api/";
             var client = new RestClient.RestClient(connectionString);
             var page = new NoteKeeperClient.Views.LoginScreen(client);
             MainPage = page;

@@ -5,47 +5,122 @@
             xmlns:converters="clr-namespace:NoteKeeperClient.Converters"
              x:Class="NoteKeeperClient.Views.EditNoteScreen"
             x:Name="TabbedPage">
+  <TabbedPage.Resources>
+    <ResourceDictionary>
+      <converters:InverseBoolConverter x:Key="InverseBool"/>
+    </ResourceDictionary>
+  </TabbedPage.Resources>
 
-  <ContentPage Title="Информация"
+  <ContentPage Title="Инфо"
                attached:AttachedProperties.Error="{Binding Error, Mode = TwoWay}">
     <ContentPage.Content>
       <StackLayout>
-        <Grid>
+        <Grid Padding="5">
           <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
           </Grid.ColumnDefinitions>
           <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
           </Grid.RowDefinitions>
-          <Label Grid.Column="0" Grid.Row="0" Text="Владелец"/>
-          <Label Grid.Column="1" Grid.Row="0" Text="{Binding Path=Owner.Name}"/>
-          <Label Grid.Column="1" Grid.Row="1" Text="{Binding Path=Owner.Email}"/>
-          <Label Grid.Column="0" Grid.Row="2" Text="Дата создания"/>
-          <Label Grid.Column="1" Grid.Row="2" Text="{Binding Path=SelectedNote.CreationDate, StringFormat='{0:yyyy:MM:dd}'}"/>
-          <Label Grid.Column="0" Grid.Row="3" Text="Дата последнего изменения"/>
-          <Label Grid.Column="1" Grid.Row="3" Text="{Binding Path=SelectedNote.LastUpdateDate, StringFormat='{0:yyyy:MM:dd}'}"/>
+          <Label Grid.Column="0" Grid.Row="0" 
+                 Text="Владелец"
+                 TextColor="#6C8CD5"
+                 Margin="5"
+                 FontSize="Micro"
+                 FontAttributes="Bold"/>
+          <Label Grid.Column="1" Grid.Row="0" 
+                 Text="{Binding Path=Owner.Name}"
+                 FontSize="Micro"
+                 Margin="5"/>
+          <Label Grid.Column="1" Grid.Row="1"
+                 FontSize="Micro"
+                 Margin="5"
+                 Text="{Binding Path=Owner.Email}"/>
+          <Label Grid.Column="0" Grid.Row="2"
+                 TextColor="#6C8CD5"
+                 FontSize="Micro"
+                 Margin="5"
+                 Text="Дата создания"
+                 FontAttributes="Bold"/>
+          <Label Grid.Column="1" Grid.Row="2" 
+                 FontSize="Micro"
+                 Margin="5"
+                 Text="{Binding Path=SelectedNote.CreationDate, StringFormat='{0:yyyy:MM:dd}'}"/>
+          <Label Grid.Column="0" Grid.Row="3"
+                 TextColor="#6C8CD5"
+                 FontSize="Micro"
+                 Margin="5"
+                 Text="Дата последнего изменения"
+                 FontAttributes="Bold"/>
+          <Label Grid.Column="1" Grid.Row="3" 
+                 FontSize="Micro"
+                 Margin="5"
+                 Text="{Binding Path=SelectedNote.LastUpdateDate, StringFormat='{0:yyyy:MM:dd}'}"/>
         </Grid>
-        <Label Text="Заголовок"/>
-        <Label Text="{Binding Path=SelectedNote.Heading, Mode=TwoWay}"/>
-        <Label Text="Текст"/>
-        <Label Text="{Binding Path=SelectedNote.Text, Mode=TwoWay}"/>
+        <BoxView HeightRequest="1"
+                 HorizontalOptions="FillAndExpand"
+                 Color="#6C8CD5"/>
+        <Label Text="Заголовок"
+               Margin="5"
+               FontAttributes="Bold"
+               FontSize="Medium"
+               HorizontalTextAlignment="Center"/>
+        <Label Text="{Binding Path=SelectedNote.Heading, Mode=TwoWay}"
+               Margin="5"
+               FontSize="Medium"/>
+        <Label Text="Текст"
+               Margin="5"
+               FontAttributes="Bold"
+               FontSize="Medium"
+               HorizontalTextAlignment="Center"/>
+        <Label Text="{Binding Path=SelectedNote.Text, Mode=TwoWay}"
+               FontSize="Medium"
+               Margin="5"/>
       </StackLayout>
     </ContentPage.Content>
   </ContentPage>
-  <ContentPage Title="Редактировать">
+  <ContentPage Title="Изменить">
     <ContentPage.Content>
-      <StackLayout>
+      <StackLayout VerticalOptions="FillAndExpand"
+                   HorizontalOptions="FillAndExpand">
         <Label Text="Заголовок"
-                HorizontalOptions="CenterAndExpand"/>
-        <Editor Text="{Binding Path=NewHeading}"/>
+                FontSize="Medium"
+              FontAttributes="Bold"
+              HorizontalTextAlignment="Center"
+              Margin="5"/>
+        <Editor Text="{Binding Path=NewHeading}"
+                Margin="5"/>
         <Label Text="Текст"
-                HorizontalOptions="CenterAndExpand"/>
-        <Editor Text="{Binding Path=NewText}"/>
-        <Button Text="Сохранить" Command="{Binding Path=SaveNoteCommand}"/>
+                HorizontalOptions="CenterAndExpand"
+               FontSize="Medium"
+              FontAttributes="Bold"
+              HorizontalTextAlignment="Center"
+              Margin="5"/>
+        <ScrollView Margin="5" VerticalOptions="FillAndExpand">
+          <Editor Text="{Binding Path=NewText}"/>
+        </ScrollView>
+        <Grid Margin="5">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="20*"/>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Button Text="Сохранить" 
+                  Command="{Binding Path=SaveNoteCommand}"
+                  Margin="5"
+              IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"
+              Grid.Column="1"/>
+        </Grid>
+        <ProgressBar attached:AttachedProperties.IsBusy ="{Binding IsBusy}" 
+                       IsVisible="False"
+                       VerticalOptions="End"/>
       </StackLayout>
     </ContentPage.Content>
   </ContentPage>
@@ -57,38 +132,70 @@
       </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-      <ListView ItemsSource="{Binding Path=Tags}"
+      <StackLayout VerticalOptions="FillAndExpand"
+                   HorizontalOptions="FillAndExpand">
+        <ScrollView VerticalOptions="FillAndExpand">
+          <ListView ItemsSource="{Binding Path=Tags}"
                 HasUnevenRows="True"
-                x:Name="Tags">
-        <ListView.ItemTemplate>
-          <DataTemplate>
-            <ViewCell>
-              <ViewCell.ContextActions>
-                <MenuItem Text="Добавить" 
+                x:Name="Tags"
+                IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}">
+            <ListView.ItemTemplate>
+              <DataTemplate>
+                <ViewCell>
+                  <ViewCell.ContextActions>
+                    <MenuItem Text="Добавить" 
                           Command="{Binding Path=BindingContext.AddTagCommand, Source={x:Reference TabbedPage}}" 
                           CommandParameter="{Binding .}"/>
-                <MenuItem Text="Удалить"
+                    <MenuItem Text="Удалить"
                           Command="{Binding Path=BindingContext.RemoveTagCommand, Source={x:Reference TabbedPage}}" 
                           CommandParameter="{Binding .}"/>
-              </ViewCell.ContextActions>
-              <StackLayout Padding="5"
+                  </ViewCell.ContextActions>
+                  <StackLayout Padding="10"
                            BackgroundColor="{Binding Path=IsSelected, Converter={StaticResource Key=BoolToColor}}">
-              <Label Text="{Binding Path=Tag.Name}" 
-                     FontSize="Large"/>
-              </StackLayout>
-            </ViewCell>
-          </DataTemplate>
-        </ListView.ItemTemplate>   
-      </ListView>
+                    <Label Text="{Binding Path=Tag.Name}" 
+                     FontSize="Medium"/>
+                  </StackLayout>
+                </ViewCell>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+        </ScrollView>
+        <ProgressBar attached:AttachedProperties.IsBusy ="{Binding IsBusy}" 
+                       IsVisible="False"
+                       VerticalOptions="End"/>
+      </StackLayout>
     </ContentPage.Content>
   </ContentPage>
-  <ContentPage Title="Пользователи">
+  <ContentPage Title="Доступ">
     <ContentPage.Content>
-      <StackLayout>
-        <Label Text="Поделиться"/>
+      <StackLayout VerticalOptions="FillAndExpand">
+        <StackLayout VerticalOptions="FillAndExpand">
+        <Label Text="Поделиться"
+               FontSize="Medium"
+              FontAttributes="Bold"
+              HorizontalTextAlignment="Center"
+              Margin="5"/>
         <Entry Text="{Binding Path=NewPartnerName}" Placeholder="Email"/>
-        <Button Text="Добавить" Command="{Binding Path=AddPartnerCommand}"/>
-        <Label Text="Имеют доступ"/>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="20*"/>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Button Text="Добавить" 
+                  Command="{Binding Path=AddPartnerCommand}"
+                  IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"
+                  Grid.Column="1"/>
+          </Grid>
+        <Label Text="Имеют доступ"
+               FontSize="Medium"
+              FontAttributes="Bold"
+              HorizontalTextAlignment="Center"
+              Margin="5"/>
+        <ScrollView>
         <ListView ItemsSource="{Binding Path=SelectedNote.Partners}"
                   HasUnevenRows="True">
           <ListView.ItemTemplate>
@@ -105,7 +212,12 @@
             </DataTemplate>
           </ListView.ItemTemplate>
         </ListView>
+        </ScrollView>
       </StackLayout>
+        <ProgressBar attached:AttachedProperties.IsBusy ="{Binding IsBusy}" 
+                     IsVisible="False"
+                     VerticalOptions="End"/>
+        </StackLayout>
     </ContentPage.Content>
   </ContentPage>
 </TabbedPage>

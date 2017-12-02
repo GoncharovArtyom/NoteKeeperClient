@@ -1,57 +1,91 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:NoteKeeperClient.Converters"
              x:Class="NoteKeeperClient.Views.MainScreenMaster"
              Title="Master">
-  <StackLayout>
-    <Grid BackgroundColor="#03A9F4">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="10"/>
-        <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="10"/>
-      </Grid.ColumnDefinitions>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="30"/>
-        <RowDefinition Height="30"/>
-        <RowDefinition Height="40"/>
-      </Grid.RowDefinitions>
-      <Label
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:InverseBoolConverter x:Key="InverseBool"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <StackLayout VerticalOptions="FillAndExpand"
+               HorizontalOptions="FillAndExpand">
+    <StackLayout BackgroundColor="#03A9F4"
+                 VerticalOptions="Start">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Text="{Binding Path=Name}"
+             Style="{DynamicResource SubtitleStyle}"
+             FontSize="Large"
+             HorizontalTextAlignment="Center"
+             FontAttributes="Bold"
+             Grid.Row="2"/>
+      </Grid>
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="10*"/>
+          <ColumnDefinition Width="40*"/>
+          <ColumnDefinition Width="40*"/>
+          <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="40"/>
+          <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Label
               Grid.Column="1"
-              Grid.Row="1"
-              Text="{Binding Path=Name}"
-              Style="{DynamicResource SubtitleStyle}"/>
-      <Label
-              Grid.Column="1"
-              Grid.Row="2"
+              Grid.Row="0"
               Text="{Binding Path=Email}"
-              Style="{DynamicResource SubtitleStyle}"/>
-      <Button Text="Выйти"
+              Style="{DynamicResource SubtitleStyle}"
+              HorizontalTextAlignment="Center"/>
+        <Button Text="Выйти"
               Command="{Binding Path=LogOutCommand}"
-              Grid.Column="3"
-              Grid.Row="2"
-              HeightRequest="30"/>
-    </Grid>
-    <ListView x:Name="MenuItemsListView"
+              Grid.Column="2"
+              Grid.Row="0"
+              HeightRequest="30"
+              HorizontalOptions="Center"
+              IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
+      </Grid>
+    </StackLayout>
+    <ScrollView VerticalOptions="FillAndExpand">
+      <ListView x:Name="MenuItemsListView"
               SeparatorVisibility="None"
               HasUnevenRows="true"
               SelectedItem="{Binding Path=SelectedTag, Mode=TwoWay}"
               ItemsSource="{Binding Path=TagsToShow}">
-      <ListView.ItemTemplate>
-        <DataTemplate>
-          <ViewCell>
-            <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
-              <Label VerticalOptions="FillAndExpand" 
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell>
+              <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
+                <Label VerticalOptions="FillAndExpand" 
                     VerticalTextAlignment="Center" 
                     Text="{Binding Path=Name}" 
-                    FontSize="24"/>
-            </StackLayout>
-          </ViewCell>
-        </DataTemplate>
-      </ListView.ItemTemplate>
-      
-    </ListView>
-    <Button Text="Редактировать" Command="{Binding Path=EditTagsCommand}"/>
+                    FontSize="Medium"/>
+              </StackLayout>
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+
+      </ListView>
+    </ScrollView>
+    <StackLayout VerticalOptions="End"
+                 Margin="10">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="20*"/>
+          <ColumnDefinition Width="60*"/>
+          <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+      <Button Text="Редактировать" 
+              Command="{Binding Path=EditTagsCommand}"
+              Grid.Column="1"
+              HorizontalOptions="FillAndExpand"
+              IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
+      </Grid>
+    </StackLayout>
   </StackLayout>
 </ContentPage>

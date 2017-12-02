@@ -13,10 +13,34 @@
     <x:Arguments>
       <ContentPage Title="NoteKeeper"
                    attached:AttachedProperties.Error="{Binding Error, Mode = TwoWay}">
-        <StackLayout>
-          <Entry Placeholder="Email" Text="{Binding LogInEmail}" IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
-          <Button Text="Войти" Command="{Binding LogInCommand}" IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
-          <ProgressBar attached:AttachedProperties.IsBusy ="{Binding IsBusy}" IsVisible="False"/>
+        <StackLayout VerticalOptions="FillAndExpand"
+                     HorizontalOptions="FillAndExpand">
+        <StackLayout VerticalOptions="Start">
+          <Entry Placeholder="Email" 
+                 Text="{Binding LogInEmail}" 
+                 IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="60*"/>
+                <ColumnDefinition Width="20*"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition/>
+              </Grid.RowDefinitions>
+              <Button Text="Войти" 
+                  Command="{Binding LogInCommand}" 
+                  IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"
+                  HorizontalOptions="FillAndExpand"
+                      Grid.Column="1"
+                      Grid.Row="0"/>
+            </Grid>
+          </StackLayout>
+          <StackLayout VerticalOptions="CenterAndExpand"/>
+          <StackLayout VerticalOptions="End">
+            <ProgressBar attached:AttachedProperties.IsBusy ="{Binding IsBusy}" 
+                     IsVisible="False"/>
+            </StackLayout>
         </StackLayout>
       </ContentPage>
     </x:Arguments>
@@ -24,11 +48,32 @@
   <NavigationPage  Title="Создать аккаунт">
     <x:Arguments>
       <ContentPage Title="NoteKeeper">
-        <StackLayout>
+        <StackLayout VerticalOptions="FillAndExpand"
+                     HorizontalOptions="FillAndExpand">
+        <StackLayout VerticalOptions="Start">
           <Entry Placeholder="Email" Text="{Binding CreateEmail}" IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
           <Entry Placeholder="Имя" Text="{Binding CreateName}" IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
-          <Button Text="Создать пользователя" Command="{Binding CreateUserCommand}" IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"/>
-          <ProgressBar attached:AttachedProperties.IsBusy ="{Binding IsBusy}" IsVisible="False"/>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="60*"/>
+                <ColumnDefinition Width="20*"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition/>
+              </Grid.RowDefinitions>
+              <Button Text="Создать пользователя" 
+                      Command="{Binding CreateUserCommand}" 
+                      IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}"
+                      Grid.Row="0"
+                      Grid.Column="1"
+                      HorizontalOptions="FillAndExpand"/>
+              </Grid>
+          </StackLayout>
+          <StackLayout VerticalOptions="FillAndExpand"/>
+          <ProgressBar attached:AttachedProperties.IsBusy ="{Binding IsBusy}" 
+                       IsVisible="False"
+                       VerticalOptions="End"/>
         </StackLayout>
       </ContentPage>
     </x:Arguments>

@@ -2,31 +2,59 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:attached="clr-namespace:NoteKeeperClient.AttachedProperties"
+             xmlns:converters="clr-namespace:NoteKeeperClient.Converters"
              x:Class="NoteKeeperClient.Views.TagsScreen"
              x:Name="TagsScreen"
              Title="Теги"
              attached:AttachedProperties.Error="{Binding Error, Mode = TwoWay}">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:InverseBoolConverter x:Key="InverseBool"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
   <ContentPage.Content>
-    <StackLayout>
-      <ListView x:Name="Tags"
-                ItemsSource="{Binding Path=Tags}">
-        <ListView.ItemTemplate>
-          <DataTemplate>
-            <ViewCell>
-              <ViewCell.ContextActions>
-                <MenuItem Text="Изменить"
+    <StackLayout VerticalOptions="FillAndExpand"
+                 HorizontalOptions="FillAndExpand">
+      <StackLayout VerticalOptions="FillAndExpand">
+        <ScrollView>
+          <ListView x:Name="Tags"
+                    ItemsSource="{Binding Path=Tags}"
+                    IsEnabled="{Binding Path=IsBusy, Converter={StaticResource Key=InverseBool}}">
+            <ListView.ItemTemplate>
+              <DataTemplate>
+                <ViewCell>
+                  <ViewCell.ContextActions>
+                    <MenuItem Text="Изменить"
                           Command="{Binding Path=BindingContext.EditTagCommand, Source={x:Reference TagsScreen}}"
                           CommandParameter="{Binding .}"/>
-                <MenuItem Text="Удалить"
+                    <MenuItem Text="Удалить"
                           Command="{Binding Path=BindingContext.DeleteTagCommand, Source={x:Reference TagsScreen}}"
                           CommandParameter="{Binding .}"/>
-              </ViewCell.ContextActions>
-              <Label Text="{Binding Path=Name}"/>
-            </ViewCell>
-          </DataTemplate>
-        </ListView.ItemTemplate>
-      </ListView>
-      <Button Text="Создать" Command="{Binding Path=CreateTagCommand}"/> 
+                  </ViewCell.ContextActions>
+                  <Label Text="{Binding Path=Name}"
+                         Margin="10"
+                         FontSize="Medium"/>
+                </ViewCell>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+        </ScrollView>
+      </StackLayout>
+      <StackLayout VerticalOptions="End"
+                   Margin="10">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="20*"/>
+          </Grid.ColumnDefinitions>
+          <Button Text="Создать" 
+                  Command="{Binding Path=CreateTagCommand}"
+                  Grid.Column="1"/>
+        </Grid>
+        <ProgressBar attached:AttachedProperties.IsBusy ="{Binding IsBusy}" 
+                       IsVisible="False"/>
+      </StackLayout>
     </StackLayout>
   </ContentPage.Content>
 </ContentPage>

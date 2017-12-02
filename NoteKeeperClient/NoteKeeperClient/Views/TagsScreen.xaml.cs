@@ -28,6 +28,10 @@ namespace NoteKeeperClient.Views
                 {
                     await Navigation.PushModalAsync(new EditTagScreen(client, _user, tag, _notes, _applyLocalChanges));
                 });
+
+            Tags.ItemSelected += (sender, e) => {
+                ((ListView)sender).SelectedItem = null;
+            };
         }
     }
 }

@@ -127,6 +127,10 @@ namespace NoteKeeperClient.ViewModels
             AddPartnerCommand = new Command(async () =>
             {
                 var partnerEmail = NewPartnerName;
+                if ((_note.Partners as List<User>).Find((User item)=> { return item.Email == partnerEmail; }) != null)
+                {
+                    return;
+                }
                 
                 if(partnerEmail == "")
                 {
